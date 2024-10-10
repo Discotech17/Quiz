@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz App</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to the Quiz App</h1>
+        <a href="{{ url_for('start_quiz') }}" class="button">Start Quiz</a>
+        <a href="{{ url_for('manage_questions') }}" class="button">Manage Questions</a>
+        <a href="{{ url_for('history') }}" class="button">View History</a>
+        <a href="{{ url_for('add_questions_from_url') }}" class="button">Add Questions Through Website</a>
+        <a href="{{ url_for('add_questions_from_image') }}" class="button">Add Questions Through Screenshot</a> <!-- New Button -->
+    </div>
+</body>
+</html>

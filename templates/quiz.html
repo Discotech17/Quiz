@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Take Quiz</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Quiz</h1>
+        <form method="POST" action="{{ url_for('submit_quiz') }}" id="quizForm">
+            {% for question in questions %}
+                <div class="question-block">
+                    <h3>{{ loop.index }}. {{ question['question']|safe }}</h3>
+
+                    {% if question['multiple_selection'] %}
+                        <!-- Use checkboxes for multiple selection questions -->
+                        <input type="checkbox" name="answer_{{ question['id'] }}" value="{{ question['choice1'] }}"> {{ question['choice1'] }}<br>
+                        <input type="checkbox" name="answer_{{ question['id'] }}" value="{{ question['choice2'] }}"> {{ question['choice2'] }}<br>
+                        <input type="checkbox" name="answer_{{ question['id'] }}" value="{{ question['choice3'] }}"> {{ question['choice3'] }}<br>
+                        <input type="checkbox" name="answer_{{ question['id'] }}" value="{{ question['choice4'] }}"> {{ question['choice4'] }}<br>
+                    {% else %}
+                        <!-- Use radio buttons for single selection questions -->
+                        <input type="radio" name="answer_{{ question['id'] }}" value="{{ question['choice1'] }}"> {{ question['choice1'] }}<br>
+                        <input type="radio" name="answer_{{ question['id'] }}" value="{{ question['choice2'] }}"> {{ question['choice2'] }}<br>
+                        <input type="radio" name="answer_{{ question['id'] }}" value="{{ question['choice3'] }}"> {{ question['choice3'] }}<br>
+                        <input type="radio" name="answer_{{ question['id'] }}" value="{{ question['choice4'] }}"> {{ question['choice4'] }}<br>
+                    {% endif %}
+                </div>
+            {% endfor %}
+            <!-- Submit button -->
+            <button id="submitBtn" disabled>Submit</button>
+        </form>
+    </div>
+</body>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.getElementById('quizForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const radioOptions = document.querySelectorAll('input[type="radio"]');
+        const checkboxOptions = document.querySelectorAll('input[type="checkbox"]');
+
+        // Function to check if all questions have been answered
+        function checkAllQuestionsAnswered() {
+            let allQuestionsAnswered = true;
+
+            {% for question in questions %}
+                const isMultiple{{question['id']}} = {{ question['multiple_selection'] | lower }};
+                const questionId{{question['id']}} = {{ question['id'] }};
+
+                if (isMultiple{{question['id']}}) {
+                    const selectedCheckboxes = document.querySelectorAll(`input[name="answer_{{ question['id'] }}"]:checked`);
+                    if (selectedCheckboxes.length < 2) {
+                        allQuestionsAnswered = false;
+                    }
+                } else {
+                    const selectedRadio = document.querySelector(`input[name="answer_{{ question['id'] }}"]:checked`);
+                    if (!selectedRadio) {
+                        allQuestionsAnswered = false;
+                    }
+                }
+            {% endfor %}
+
+            return allQuestionsAnswered;
+        }
+
+        // Update the submit button's state
+        function updateSubmitButton() {
+            const allAnswered = checkAllQuestionsAnswered();
+            submitBtn.disabled = !allAnswered;
+        }
+
+        // Listen for changes in radio buttons (single selection)
+        radioOptions.forEach(option => {
+            option.addEventListener('change', updateSubmitButton);
+        });
+
+        // Listen for changes in checkboxes (multiple selection)
+        checkboxOptions.forEach(option => {
+            option.addEventListener('change', updateSubmitButton);
+        });
+
+        // Form submit handler to ensure all questions are answered before submission
+        form.addEventListener('submit', function(event) {
+            if (!checkAllQuestionsAnswered()) {
+                event.preventDefault();
+                alert("Please answer all questions before submitting the quiz.");
+            }
+        });
+    });
+</script>
+</html>

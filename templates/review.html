@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Review</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Quiz Review</h1>
+
+        <!-- Displaying the results for each question -->
+        {% for question in questions %}
+            <div class="question-block">
+                <h3>{{ loop.index }}. {{ question['question'] }}</h3>
+                <p>Your Answer: {{ selected_answers[question['id']] }}</p>
+                <p>Correct Answer: {{ question['correct_answer'] }}</p>
+                <p>Result: <strong class="{{ 'correct' if correct_answers[question['id']] == 'correct' else 'wrong' }}">
+                    {{ correct_answers[question['id']] }}</strong></p>
+            </div>
+        {% endfor %}
+
+        <!-- Button to return to the homepage -->
+        <div class="button-container">
+            <a href="{{ url_for('index') }}" class="button">Return to Homepage</a>
+        </div>
+    </div>
+</body>
+</html>

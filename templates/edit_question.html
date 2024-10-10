@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Question</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Edit Question</h1>
+        <form method="POST" action="{{ url_for('update_question', question_id=question['id']) }}">
+            <label for="question">Question</label>
+            <textarea id="question" name="question">{{ question.question }}</textarea><br>
+
+            <label for="choice1">Choice A</label>
+            <textarea id="choice1" name="choice1">{{ question.choice1 }}</textarea><br>
+
+            <label for="choice2">Choice B</label>
+            <textarea id="choice2" name="choice2">{{ question.choice2 }}</textarea><br>
+
+            <label for="choice3">Choice C</label>
+            <textarea id="choice3" name="choice3">{{ question.choice3 }}</textarea><br>
+
+            <label for="choice4">Choice D</label>
+            <textarea id="choice4" name="choice4">{{ question.choice4 }}</textarea><br>
+
+            <label for="correct_answer">Correct Answer</label>
+            <textarea id="correct_answer" name="correct_answer">{{ question.correct_answer }}</textarea><br>
+
+            <!-- Checkbox for enabling multiple selections -->
+            <label><input type="checkbox" name="multiple_selection" {% if question.multiple_selection %}checked{% endif %}> Multiple Selections</label><br>
+
+            <button type="submit">Update Question</button>
+        </form>
+
+        <!-- Back button with href and class -->
+        <a href="{{ url_for('manage_questions') }}" class="button">Back</a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz History</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Quiz History</h1>
+        <div class="buttons">
+            <a href="{{ url_for('index') }}" class="button">Home</a>
+            <!-- New window for report generation -->
+            <a href="{{ url_for('generate_report') }}" target="_blank" class="button">Generate Report</a>
+        </div>
+
+        <table>
+            <tr>
+                <th>Date</th>
+                <th>Correct Answers</th>
+                <th>Total Questions</th>
+                <th>Percentage</th>
+            </tr>
+            {% for record in history %}
+            <tr>
+                <td>{{ record['date_taken'] }}</td>
+                <td>{{ record['correct_answers'] }}</td>
+                <td>{{ record['total_questions'] }}</td>
+                <td>{{ (record['correct_answers'] / record['total_questions']) * 100 }}%</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</body>
+</html>

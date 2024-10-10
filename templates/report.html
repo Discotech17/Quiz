@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Report</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- Include Chart.js -->
+    <style>
+        .container {
+            width: 100%;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+    
+        /* Set a fixed height for the canvas while keeping the width responsive */
+        canvas {
+            width: 100%;   /* Chart will take up the full width of the container */
+            height: 400px; /* Fixed height to prevent the page from growing */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Quiz Performance Report</h1>
+        <canvas id="progressChart"></canvas>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const ctx = document.getElementById('progressChart').getContext('2d');
+        
+            // Dates and percentages passed from Python
+            const quizDates = {{ quizDates | tojson | safe }};
+            const quizPercentages = {{ quizPercentages | tojson | safe }};
+            const yMax = {{ y_max }};  // Maximum Y-axis value with a buffer
+        
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: quizDates,  // X-axis labels (formatted dates)
+                    datasets: [{
+                        label: 'Quiz Performance (%)',
+                        data: quizPercentages,  // Y-axis data (quiz percentages)
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: yMax,  // Dynamically set the max Y value with a gap
+                            ticks: {
+                                callback: function(value) {
+                                    if (value === yMax) {
+                                        return '';  // Hide the max Y value
+                                    }
+                                    return value;  // Show other Y values
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Your Quiz Performance Over Time'
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

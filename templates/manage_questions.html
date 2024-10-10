@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Questions</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Manage Questions</h1>
+        <a href="{{ url_for('add_question') }}" class="button">Add New Question</a>
+        <a href="{{ url_for('index') }}" class="button">Home</a> <!-- Home button -->
+        <table>
+            <thead>
+                <tr>
+                    <th>Question</th>
+                    <th>Choices</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for question in questions %}
+                <tr>
+                    <td>{{ question['question'] }}</td>
+                    <td>
+                        <ul>
+                            <li>{{ question['choice1'] }}</li>
+                            <li>{{ question['choice2'] }}</li>
+                            <li>{{ question['choice3'] }}</li>
+                            <li>{{ question['choice4'] }}</li>
+                        </ul>
+                    </td>
+                    <td>
+                        <a href="{{ url_for('edit_question', question_id=question['id']) }}" class="button">Edit</a>
+                        <form action="{{ url_for('delete_question_route', question_id=question['id']) }}" method="POST" style="display:inline;">
+                            <button type="submit" class="button">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

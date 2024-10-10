@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Questions from Screenshot</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Add Questions from Screenshot</h1>
+        <form method="POST" action="{{ url_for('process_image') }}" enctype="multipart/form-data">
+            <label for="screenshot">Upload Screenshot:</label>
+            <input type="file" name="screenshot" accept="image/*" required>
+            <button type="submit" class="button">Start</button>
+            <a href="{{ url_for('index') }}" class="button">Back</a>
+        </form>
+    </div>
+</body>
+</html>
