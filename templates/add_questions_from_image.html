@@ -9,12 +9,41 @@
 <body>
     <div class="container">
         <h1>Add Questions from Screenshot</h1>
+
+        <!-- Form for uploading the screenshot -->
         <form method="POST" action="{{ url_for('process_image') }}" enctype="multipart/form-data">
             <label for="screenshot">Upload Screenshot:</label>
             <input type="file" name="screenshot" accept="image/*" required>
             <button type="submit" class="button">Start</button>
             <a href="{{ url_for('index') }}" class="button">Back</a>
         </form>
+
+        <!-- Form for dynamically showing the questions and their choices -->
+        {% if questions %}
+        <form method="POST" action="{{ url_for('save_questions_from_image') }}">
+            {% for question in questions %}
+                <div class="question-block">
+                    <label for="question_{{ loop.index }}">Question {{ loop.index }}</label>
+                    <textarea id="question_{{ loop.index }}" name="question_{{ loop.index }}">{{ question['question'] }}</textarea><br>
+
+                    <!-- Dynamically render the choice text boxes based on the number of choices -->
+                    {% for choice_index, choice in enumerate(question['choices'], start=1) %}
+                        <label for="choice_{{ loop.index }}_{{ choice_index }}">Choice {{ choice_index }}</label>
+                        <textarea id="choice_{{ loop.index }}_{{ choice_index }}" name="choice_{{ loop.index }}_{{ choice_index }}">{{ choice }}</textarea><br>
+                    {% endfor %}
+
+                    <!-- Correct Answer -->
+                    <label for="correct_answer_{{ loop.index }}">Correct Answer</label>
+                    <textarea id="correct_answer_{{ loop.index }}" name="correct_answer_{{ loop.index }}">{{ question['correct_answer'] }}</textarea><br>
+
+                    <!-- Checkbox for multiple selections -->
+                    <label><input type="checkbox" name="multiple_selection_{{ loop.index }}" {% if question['multiple_selection'] %}checked{% endif %}> Multiple Selections</label><br>
+                </div>
+                <hr>
+            {% endfor %}
+            <button type="submit" class="button">Save Questions</button>
+        </form>
+        {% endif %}
     </div>
 </body>
 </html>

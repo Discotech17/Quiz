@@ -4,6 +4,26 @@
     <meta charset="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Question</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script>
+        // Function to add a new choice field
+        function addChoice() {
+            const choiceContainer = document.getElementById('choice-container');
+            const newChoiceIndex = choiceContainer.children.length + 1;
+
+            const label = document.createElement('label');
+            label.setAttribute('for', `choice${newChoiceIndex}`);
+            label.textContent = `Choice ${String.fromCharCode(64 + newChoiceIndex)}`;  // Convert number to letter
+
+            const textarea = document.createElement('textarea');
+            textarea.setAttribute('id', `choice${newChoiceIndex}`);
+            textarea.setAttribute('name', `choice${newChoiceIndex}`);
+            textarea.required = true;
+
+            choiceContainer.appendChild(label);
+            choiceContainer.appendChild(textarea);
+            choiceContainer.appendChild(document.createElement('br'));
+        }
+    </script>
 </head>
 <body>
     <div class="container">
@@ -12,23 +32,34 @@
             <label for="question">Question</label>
             <textarea id="question" name="question" required></textarea><br>
 
-            <label for="choice1">Choice A</label>
-            <textarea id="choice1" name="choice1" required></textarea><br>
+            <!-- Container for dynamically adding choices -->
+            <div id="choice-container">
+                <label for="choice1">Choice A</label>
+                <textarea id="choice1" name="choice1" required></textarea><br>
 
-            <label for="choice2">Choice B</label>
-            <textarea id="choice2" name="choice2" required></textarea><br>
+                <label for="choice2">Choice B</label>
+                <textarea id="choice2" name="choice2" required></textarea><br>
 
-            <label for="choice3">Choice C</label>
-            <textarea id="choice3" name="choice3" required></textarea><br>
+                <label for="choice3">Choice C</label>
+                <textarea id="choice3" name="choice3" required></textarea><br>
 
-            <label for="choice4">Choice D</label>
-            <textarea id="choice4" name="choice4" required></textarea><br>
+                <label for="choice4">Choice D</label>
+                <textarea id="choice4" name="choice4" required></textarea><br>
+            </div>
+
+            <!-- Button to add more choices -->
+            <button type="button" onclick="addChoice()">Add Another Choice</button><br><br>
 
             <label for="correct_answer">Correct Answer</label>
             <textarea id="correct_answer" name="correct_answer" required></textarea><br>
 
             <!-- Checkbox for enabling multiple selections -->
-            <label><input type="checkbox" name="multiple_selection"> Multiple Selections</label><br>
+            <label class="toggle-label">Multiple Selections:</label>
+                <label class="toggle">
+                    <input type="checkbox" name="multiple_selection_{{ loop.index }}" value="true">
+                    <span class="slider"></span>
+                </label>
+            <input type="hidden" name="multiple_selection_{{ loop.index }}" value="false">
 
             <button type="submit">Add Question</button>
         </form>

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Questions from Text</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Add Questions from Text</h1>
+        <form method="POST" action="{{ url_for('process_text') }}">
+            <label for="questionText">Paste your questions:</label>
+            <textarea id="questionText" name="questionText" rows="20" cols="80" required></textarea><br>
+            <button type="submit" class="button">Format Text</button>
+            <a href="{{ url_for('index') }}" class="button">Back</a>
+        </form>
+    </div>
+</body>
+</html>

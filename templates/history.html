@@ -27,7 +27,7 @@
                 <td>{{ record['date_taken'] }}</td>
                 <td>{{ record['correct_answers'] }}</td>
                 <td>{{ record['total_questions'] }}</td>
-                <td>{{ (record['correct_answers'] / record['total_questions']) * 100 }}%</td>
+                <td>{{ ((record['correct_answers'] / record['total_questions']) * 100) | round(2) }}%</td>
             </tr>
             {% endfor %}
         </table>

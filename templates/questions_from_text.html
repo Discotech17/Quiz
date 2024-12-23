@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Review Questions from Text</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        .question-block {
+            margin-bottom: 20px;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 8px;
+            margin: 8px 0;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+        .toggle {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 25px;
+        }
+
+        .toggle input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 25px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 21px;
+            width: 21px;
+            left: 2px;
+            bottom: 2px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: #4CAF50;
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(24px);
+        }
+
+        hr {
+            margin: 20px 0;
+        }
+
+        .button {
+            display: inline-block;
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            text-align: center;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        .button:hover {
+            background-color: #0056b3;
+        }
+
+        .toggle-label {
+            font-size: 16px;
+            margin-right: 10px;
+        }
+    </style>
+    <script>
+        function updateMultipleSelection(index) {
+            const toggle = document.getElementById(`multiple_selection_toggle_${index}`);
+            const hiddenInput = document.getElementById(`multiple_selection_input_${index}`);
+            hiddenInput.value = toggle.checked ? 'true' : 'false';
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>Review Formatted Questions</h1>
+        <form method="POST" action="{{ url_for('save_questions_from_text') }}">
+            {% for question in questions %}
+            <div class="question-block">
+                <label>Question {{ question['index'] }}:</label>
+                <textarea name="question_{{ question['index'] }}" required>{{ question['question'] }}</textarea><br>
+        
+                {% set choice_index = 1 %}
+                {% for choice in question['choices'] %}
+                    <label>Choice {{ question['index'] }}_{{ loop.index }}:</label>
+                    <textarea name="choice_{{ question['index'] }}_{{ loop.index }}" required>{{ choice }}</textarea><br>
+                    {% set choice_index = choice_index + 1 %}
+                {% endfor %}
+                
+                <label>Correct Answer:</label>
+                <textarea name="correct_answer_{{ question['index'] }}" required>{{ question['correct_answer'] }}</textarea><br>
+                
+                <!-- Add the toggle for multiple selections -->
+                <label class="toggle-label">Multiple Selections:</label>
+                <label class="toggle">
+                    <input type="checkbox" id="multiple_selection_toggle_{{ question['index'] }}" name="multiple_selection_{{ question['index'] }}" value="true" onchange="updateMultipleSelection({{ question['index'] }})">
+                    <span class="slider"></span>
+                </label>
+                <input type="hidden" id="multiple_selection_input_{{ question['index'] }}" name="multiple_selection_{{ question['index'] }}" value="false">
+            </div>
+            <hr>
+            {% endfor %}
+            <button type="submit" class="button">Save Questions</button>
+            <a href="{{ url_for('add_questions_from_text') }}" class="button">Back</a>
+        </form>
+    </div>
+</body>
+</html>

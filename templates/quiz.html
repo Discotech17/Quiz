@@ -15,16 +15,14 @@
 
                     {% if question['multiple_selection'] %}
                         <!-- Use checkboxes for multiple selection questions -->
-                        <input type="checkbox" name="answer_{{ question['id'] }}" value="{{ question['choice1'] }}"> {{ question['choice1'] }}<br>
-                        <input type="checkbox" name="answer_{{ question['id'] }}" value="{{ question['choice2'] }}"> {{ question['choice2'] }}<br>
-                        <input type="checkbox" name="answer_{{ question['id'] }}" value="{{ question['choice3'] }}"> {{ question['choice3'] }}<br>
-                        <input type="checkbox" name="answer_{{ question['id'] }}" value="{{ question['choice4'] }}"> {{ question['choice4'] }}<br>
+                        {% for choice in question['choices'] %}
+                            <input type="checkbox" name="answer_{{ question['id'] }}" value="{{ choice }}"> {{ choice }}<br>
+                        {% endfor %}
                     {% else %}
                         <!-- Use radio buttons for single selection questions -->
-                        <input type="radio" name="answer_{{ question['id'] }}" value="{{ question['choice1'] }}"> {{ question['choice1'] }}<br>
-                        <input type="radio" name="answer_{{ question['id'] }}" value="{{ question['choice2'] }}"> {{ question['choice2'] }}<br>
-                        <input type="radio" name="answer_{{ question['id'] }}" value="{{ question['choice3'] }}"> {{ question['choice3'] }}<br>
-                        <input type="radio" name="answer_{{ question['id'] }}" value="{{ question['choice4'] }}"> {{ question['choice4'] }}<br>
+                        {% for choice in question['choices'] %}
+                            <input type="radio" name="answer_{{ question['id'] }}" value="{{ choice }}"> {{ choice }}<br>
+                        {% endfor %}
                     {% endif %}
                 </div>
             {% endfor %}

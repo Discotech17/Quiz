@@ -13,33 +13,27 @@
             {% for question in questions %}
                 <div class="question-block">
                     <label for="question_{{ loop.index }}">Question</label>
-                    <textarea id="question_{{ loop.index }}" name="question_{{ loop.index }}">{{ question['question'] }}</textarea><br>
+                    <textarea id="question_{{ loop.index }}" name="question_{{ loop.index }}" required>{{ question['question'] }}</textarea><br>
 
-                    <label for="choice_{{ loop.index }}_1">Choice A</label>
-                    <textarea id="choice_{{ loop.index }}_1" name="choice_{{ loop.index }}_1">{{ question['choices'][0] }}</textarea><br>
-
-                    <label for="choice_{{ loop.index }}_2">Choice B</label>
-                    <textarea id="choice_{{ loop.index }}_2" name="choice_{{ loop.index }}_2">{{ question['choices'][1] }}</textarea><br>
-
-                    <label for="choice_{{ loop.index }}_3">Choice C</label>
-                    <textarea id="choice_{{ loop.index }}_3" name="choice_{{ loop.index }}_3">{{ question['choices'][2] }}</textarea><br>
-
-                    <label for="choice_{{ loop.index }}_4">Choice D</label>
-                    <textarea id="choice_{{ loop.index }}_4" name="choice_{{ loop.index }}_4">{{ question['choices'][3] }}</textarea><br>
+                    <!-- Dynamically generate the choices -->
+                    {% for choice in question['choices'] %}
+                        <label for="choice_{{ loop.index }}_{{ loop.index0 }}">Choice {{ loop.index }}</label>
+                        <textarea id="choice_{{ loop.index }}_{{ loop.index0 }}" name="choice_{{ loop.index }}_{{ loop.index0 }}" required>{{ choice }}</textarea><br>
+                    {% endfor %}
 
                     <label for="correct_answer_{{ loop.index }}">Correct Answer</label>
-                    <textarea id="correct_answer_{{ loop.index }}" name="correct_answer_{{ loop.index }}">{{ question['correct_answer'] }}</textarea><br>
+                    <textarea id="correct_answer_{{ loop.index }}" name="correct_answer_{{ loop.index }}" required>{{ question['correct_answer'] }}</textarea><br>
 
                     <!-- Checkbox for multiple selections -->
                     <label><input type="checkbox" name="multiple_selection_{{ loop.index }}"> Multiple Selections</label><br>
                 </div>
                 <hr>
             {% endfor %}
-            <button type="submit">Save Questions</button>
+            <button type="submit" class="button">Save Questions</button>
         </form>
 
         <!-- Back button -->
-        <a href="{{ url_for('add_questions_from_image') }}" class="button">Back</a>
+        <a href="{{ url_for('index') }}" class="button">Back</a>
     </div>
 </body>
 </html>
